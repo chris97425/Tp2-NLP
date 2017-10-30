@@ -1,0 +1,133 @@
+Q1 Denmark
+Q1 Norway
+Q1 Sweden
+Q1 Iceland
+Q2 Greece
+Q2 Portugal
+Q2 Ireland
+Q2 Italy
+Q2 Spain
+Q3 Kuwait
+Q3 Macau
+Q3 Congo, Republic of the
+Q3 Norway
+Q3 Brunei
+Q5 Holy See (Vatican City)
+Q5 San Marino
+Q5 Liechtenstein
+Q5 Andorra
+Q5 Luxembourg
+Q5 West Bank
+Q4 Belarus
+Q4 Bhutan
+Q4 Bosnia and Herzegovina
+Q4 China
+Q4 Cuba
+Q4 Iran
+Q4 Korea, North
+Q4 Kyrgyzstan
+Q4 Mongolia
+Q4 Venezuela
+Q6 Argentina
+Q6 Bolivia
+Q6 Chile
+Q6 Ecuador
+Q6 Peru
+Q6 Venezuela
+Q7 Laos
+Q7 Cambodia
+Q7 Vietnam
+Q7 India
+Q7 Sri Lanka
+Q7 Taiwan
+Q7 Lebanon
+Q7 Syria
+Q8 Guinea
+Q8 Togo
+Q8 Benin
+Q8 Nigeria
+Q8 Cameroon
+Q8 Mozambique
+Q8 Botswana
+Q8 Sierra Leone
+Q8 Liberia
+Q8 Cote d'Ivoire
+Q8 Ghana
+Q8 Central African Republic
+Q8 Chad
+Q8 Uganda
+Q8 Rwanda
+Q8 Burundi
+Q8 Kenya
+Q8 Tanzania
+Q8 Malawi
+Q8 Zambia
+Q8 Zimbabwe
+Q8 Sudan
+Q8 Ethiopia
+Q8 Somalia
+Q8 Congo, Democratic Republic of the
+Q8 Angola
+Q8 South Africa
+Q9 Cuba
+Q9 Dominican Republic
+Q9 Puerto Rico
+Q9 Trinidad and Tobago
+Q10 Afghanistan
+Q10 Burma
+Q10 Cambodia
+Q10 China
+Q10 Djibouti
+Q10 India
+Q10 Indonesia
+Q10 Iran
+Q10 Iraq
+Q10 Jordan
+Q10 Korea, North
+Q10 Laos
+Q10 Nepal
+Q10 Turkey
+Q10 Turkmenistan
+Q10 Uzbekistan
+Q11 Senegal
+Q11 Guinea-Bissau
+Q11 Liberia
+Q11 Sierra Leone
+Q11 Mali
+Q11 Cote d'Ivoire
+Q12 United States
+Q13 Maldives
+Q13 Sri Lanka
+Q13 Comoros
+Q13 Madagascar
+Q13 Mauritius
+Q13 Seychelles
+Q14 Cyprus
+Q15 Antarctica
+Q16 Belgium
+Q16 Greece
+Q16 Tunisia
+Q17 China
+Q17 Burma
+Q17 Laos
+Q17 Thailand
+Q17 Cambodia
+Q17 Vietnam
+Q18 Russia
+Q18 United Kingdom
+Q18 France
+Q19 Benin
+Q19 Burkina Faso
+Q19 Ethiopia
+Q19 Cote d'Ivoire
+Q19 Ghana
+Q19 Cameroon
+Q19 Malawi
+Q19 Mozambique
+Q19 Mali
+Q19 Senegal
+Q19 Tanzania
+Q19 Uganda
+Q19 Zambia
+Q19 Zimbabwe
+Q20 Brazil
