@@ -20,8 +20,8 @@ def construccsv():
 
 construccsv()
 
-def constructModel(i,cc,classifieur):
-    classifieur=choiceClassifier(1)
+def constructModel(i,cc,j):
+    classifieur=choiceClassifier(j)
     # Transformation de mon document csv en dataframe grâce à panda
     df_train= pandas.read_csv('mycsv.csv')
     final=pandas.DataFrame(data=df_train)
@@ -77,7 +77,7 @@ def construcTableRP(predictions,trueclass):
 
 def truePositive(classe,tailletraining,j):
 
-    data = construcTableRP(constructModel(1,tailletraining,choiceClassifier(j)),constructModel(2,tailletraining,choiceClassifier(j)))
+    data = construcTableRP(constructModel(1,tailletraining,j),constructModel(2,tailletraining,j))
     result=0
     for i in range(0,len(data)):
 
@@ -93,7 +93,7 @@ def truePositive(classe,tailletraining,j):
 
 def falsePositive(classe,tailletraining,j):
 
-    data = construcTableRP(constructModel(1,tailletraining,choiceClassifier(j)),constructModel(2,tailletraining,choiceClassifier(j)))
+    data = construcTableRP(constructModel(1,tailletraining,j),constructModel(2,tailletraining,j))
     # print(data)
     result=0
     for i in range(0,len(data)):
@@ -105,7 +105,7 @@ def falsePositive(classe,tailletraining,j):
 
 def trueNegative(classeOption,tailletraining,j):
 
-    data = constructModel(2,tailletraining,choiceClassifier(j))
+    data = constructModel(2,tailletraining,j)
     data.sort()
     result=0
 
@@ -120,7 +120,7 @@ def trueNegative(classeOption,tailletraining,j):
 
 def falseNegative(classeOption,tailletraining,j):
 
-    data = constructModel(2,tailletraining,choiceClassifier(j))
+    data = constructModel(2,tailletraining,j)
     data.sort()
     result=0
 
@@ -135,7 +135,7 @@ def falseNegative(classeOption,tailletraining,j):
 
 def precision(classe,trainingSize,j):
     return truePositive(classe,trainingSize,j)/(truePositive(classe,trainingSize,j)+falsePositive(classe,trainingSize,j))
-print(precision("DEFINITION",300,1))
+print(precision("DEFINITION",300,2))
 
 def recall(classe,trainingSize,j):
     return truePositive(classe,trainingSize,j)/(falseNegative(classe,trainingSize,j))
