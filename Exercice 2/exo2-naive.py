@@ -1,8 +1,11 @@
 import exo2, pandas, glob
+
 from sklearn.naive_bayes import MultinomialNB as mod
 from sklearn.ensemble import RandomForestClassifier as mod2
+
 from sklearn.feature_extraction.text import CountVectorizer
 
+#Choix du classifieurn i=1 NaivesBayes sinon RandomForest
 def choiceClassifier(i):
 
     if(i==1):
@@ -12,6 +15,7 @@ def choiceClassifier(i):
 
     return classifier
 
+#Construction du fichier csv s'il n'est pas encore présent dans le répértoire
 def construccsv():
 
     a = glob.glob("*.csv")
@@ -20,8 +24,11 @@ def construccsv():
 
 construccsv()
 
+#Construction du modèle prédictive en fonction du choiceClassifier() et prédiction sur un certain nombre de ligne résévées au test
 def constructModel(i,cc,j):
+
     classifieur=choiceClassifier(j)
+
     # Transformation de mon document csv en dataframe grâce à panda
     df_train= pandas.read_csv('mycsv.csv')
     final=pandas.DataFrame(data=df_train)
@@ -54,6 +61,7 @@ def constructModel(i,cc,j):
     elif(i==3):
         return examples
 
+#Ici on construit un dictionnaire qui nous stock les différence entre les vraies prédictions et les fausses pour chaque classe
 def construcTableRP(predictions,trueclass):
 
     result = {}
@@ -74,6 +82,7 @@ def construcTableRP(predictions,trueclass):
             })
 
     return result
+
 
 def truePositive(classe,tailletraining,j):
 
@@ -131,7 +140,6 @@ def falseNegative(classeOption,tailletraining,j):
             result+=1
     return result
 # print(falseNegative("DEFINITION",300,1))
-
 
 def precision(classe,trainingSize,j):
     return truePositive(classe,trainingSize,j)/(truePositive(classe,trainingSize,j)+falsePositive(classe,trainingSize,j))
