@@ -1,12 +1,14 @@
 from re import findall as fa
-from codecs import open, decode
-from os import makedirs, path, getcwd, listdir,chdir
+from codecs import open
+from os import listdir
 import json
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk import word_tokenize
 from nltk.tag import StanfordPOSTagger
 from nltk.tokenize import RegexpTokenizer
+import csv
+
 
 import nltk
 
@@ -26,8 +28,6 @@ def stopWordsList(fichierStopTxt):
 
     return listStopWords
 
-# print(stopWordsList("../stopwords.txt"))
-# print(getcwd())
 
 def createDicoClasse():
 
@@ -165,13 +165,14 @@ def stemmingDico():
 jar = '../stanford-postagger-full-2017-06-09/stanford-postagger.jar'
 model = '../stanford-postagger-full-2017-06-09/models/english-left3words-distsim.tagger'
 # print(stemmingDico())
+# ps = StanfordPOSTagger(model, jar)
 
 
-def correctStringPosttag(tocorrect, listTag):
+def correctStringPosttag(tocorrect, listTag,ps):
 
-    ps = StanfordPOSTagger(model, jar)
     # ps=nltk.tag.
     text = ps.tag(word_tokenize(tocorrect))
+    print(text)
     # print(text)
     result=""
 
@@ -192,19 +193,69 @@ def writeDico(dico):
         json.dump(dico, outfile)
 
 def postDico(listTag):
+    ps= StanfordPOSTagger(model, jar)
 
     dico=stemmingDico()
     i=0
     for key in dico:
 
-        dico[key]["Text"]=correctStringPosttag(dico[key]["Text"],listTag)
+        dico[key]["Text"]=correctStringPosttag(dico[key]["Text"],listTag,ps)
         print(i)
         i=i+1
     return dico
 
-writeDico(postDico(listeToRemove))
+
+# print(d["1"])
+#     # for key in d:
+#     #     print(key)
+# print(sorted(d))
+# print(d["1"]["Class"])
+#
+# def posnegClassJson(dico):
+#
+#     pos = open("../pos.json", "w", "utf-8")
+#     neg = open("../neg.json", "w", "utf-8")
+#     a={}
+#     b={}
+#     i=0
+#     j=0
+#     for key in dico:
+#
+#         if (dico[key]["Class"]=="Positif"):
+#             a[i]={"Text":dico[key]["Text"]}
+#             i+=1
+#
+#         elif (dico[key]["Class"]=="Negatif"):
+#             b[j] = {"Text": dico[key]["Text"]}
+#             j+=1
+#
+#     with open('../pos.json', 'w', "utf-8") as outfile:
+#         json.dump(a, outfile)
+#     with open('../neg.json', 'w', "utf-8") as outfile:
+#         json.dump(b, outfile)
+#
+#     pos.close()
+#     neg.close()
+#
+# posnegClassJson(d)
+
+def createliste(i,dico):
 
 
 
-# st = StanfordPOSTagger('wsj-0-18-left3words-distsim.tagger')
-# st.tag(nltk.tokenize.word_tokenize("This is a test"))
+
+    classe = ["Classe"]
+    text = ["Texte"]
+
+
+    for key in dico:
+
+        classe = classe + [dico[key]["Class"]]
+        text = text + [dico[key]["Text"]]
+
+    csv_out = open('forClassification.csv', 'w')
+    mywriter = csv.writer(csv_out, delimiter=',', lineterminator='\r\n')
+    rows = zip(classe, text)
+    mywriter.writerows(rows)
+    csv_out.close()
+
