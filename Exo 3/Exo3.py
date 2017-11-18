@@ -162,7 +162,15 @@ def postDico(listTag):
         i=i+1
     return dico
 
-def createliste(i,dico):
+def createCsv(classe,text):
+
+    csv_out = open('forClassification.csv', 'w')
+    mywriter = csv.writer(csv_out, delimiter=',', lineterminator='\r\n')
+    rows = zip(classe, text)
+    mywriter.writerows(rows)
+    csv_out.close()
+
+def createliste(dico):
 
     classe = ["Classe"]
     text = ["Texte"]
@@ -172,11 +180,6 @@ def createliste(i,dico):
         classe = classe + [dico[key]["Class"]]
         text = text + [dico[key]["Text"]]
 
-def createCsv(classe,text):
+    createCsv(classe,text)
 
-    csv_out = open('forClassification.csv', 'w')
-    mywriter = csv.writer(csv_out, delimiter=',', lineterminator='\r\n')
-    rows = zip(classe, text)
-    mywriter.writerows(rows)
-    csv_out.close()
 
