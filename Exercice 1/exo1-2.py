@@ -1,33 +1,35 @@
 from elasticsearch import Elasticsearch
-import requests, os, json, glob, codecs, re
-import numpy as np
+import  os, json, glob, re
+
+##################################### Partie 0
 
 os.chdir("indexpays/")
-
-#connexion au serveur Elasticsearch
+#Connexion au serveur Elasticsearch
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
 
 #retourne une liste de tous les fichier json dans le fichier "indexpays"
-def listjson():
+##################################### Partie 1
+def listJson():
 
-    listfile = glob.glob("*.json")
-    return listfile
+    listFile = glob.glob("*.json")
+    return listFile
 
-
-def constructindex():
+##################################### Partie 2
+def constructIndex():
 
     es.indices.create(index='indexpays', ignore=400)
-    file=listjson()
+    file=listJson()
     file.sort()
     i = 0
     for keys in file:
 
         paysinfo=json.load(open(keys,encoding="utf-8"))
-        es.index(index='pays', doc_type='paysdef', id=i, body=paysinfo)
+        es.index(index='indexpays', doc_type='paysDef', id=i, body=paysinfo)
         i+=1
-
-def queryelastic(query):
+##################################### Partie 3
+constructIndex()
+def queryElastic(query):
 
     result = {
             "query" : {
@@ -43,6 +45,7 @@ def queryelastic(query):
 
     return result
 
+##################################### Partie 4
 def resultPrediction():
 
     requetes = open("../liste_requetes.txt", "r")
@@ -52,21 +55,26 @@ def resultPrediction():
     listprediction=""
     for i in range(0,len(quest)):
 
-        data = json.dumps(es.search(index="pays",doc_type="paysdef",body=queryelastic(quest[i][1])))
-        # print(data)
+        data = json.dumps(es.search(index="indexpays",doc_type="paysDef",body=queryElastic(quest[i][1])))
         j = json.loads(data)
         for g in range(0,len(j["hits"]["hits"])):
 
             listprediction=listprediction+str(quest[i][0]+" "+j["hits"]["hits"][g]["_source"]["name"]+"\n")
+
     # print(listprediction)
     return listprediction
+
 resultPrediction()
+
+##################################### Partie 5
 def writeJugementsPrediction(listeOfPrediction):
 
     file=open("../jugementsPrediction.txt","w")
     file.write(listeOfPrediction)
     file.close()
 
+
+##################################### Partie 6
 def listOfJugements(txtjugements):
 
     jugements = open("../"+txtjugements)
@@ -77,27 +85,32 @@ def listOfJugements(txtjugements):
 
     return reGex
 
+##################################### Partie 7
 def appendTab(tab,precision):
     tab.append(precision)
 
+##################################### Partie 8
 def moyTab(tab):
     result=0
+
     for i in range(0,len(tab)):
         result+=tab[i]
     try:
         moyenne = result/len(tab)
     except ZeroDivisionError:
-        moyenne=0
+        moyenne = 0
+
     return moyenne
 
+##################################### Partie 9
 def averagePrecision(txtjugements,txtjugementsPrediction):
 
     tableAverage=[]
     resultMoyPrediction=[]
     jugements = listOfJugements(txtjugements)
     jugementsPrediction = listOfJugements(txtjugementsPrediction)
-    nbPast=0
-    nominateur=0
+    denominateur=0
+    numerateur=0
     indexQestions="Q1"
 
     for i in range(0,len(jugementsPrediction)):
@@ -105,23 +118,24 @@ def averagePrecision(txtjugements,txtjugementsPrediction):
         if(indexQestions!=jugementsPrediction[i][0]):
             appendTab(resultMoyPrediction,moyTab(tableAverage))
             tableAverage = []
-            nominateur,nbPast,resultPrediction=0,0,0
+            numerateur,denominateur=0,0
             indexQestions=jugementsPrediction[i][0]
 
         if(jugementsPrediction[i] in jugements):
-            nominateur += 1
-            nbPast += 1
-            resultPrediction=nominateur/nbPast
+            numerateur+= 1
+            denominateur += 1
+            resultPrediction=numerateur/denominateur
             appendTab(tableAverage,resultPrediction)
         else:
-            nbPast+=1
-            resultPrediction = nominateur / nbPast
+            denominateur+=1
 
     return resultMoyPrediction
+
 print(averagePrecision("jugements.txt","jugementsPrediction.txt"))
+##################################### Partie 10
 
 def MAP(averagePrecision):
 
     return moyTab(averagePrecision)
 
-print(MAP(averagePrecision("jugements.txt","jugementsPrediction.txt")))
+print("Le MAP vaut: ",MAP(averagePrecision("jugements.txt","jugementsPrediction.txt")))
