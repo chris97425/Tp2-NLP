@@ -16,7 +16,7 @@ def choiceClassifier(i):
 
 def constructModel( cc, frequencies):
 
-    classifieur = choiceClassifier(2)
+    classifieur = choiceClassifier(1)
     result=[]
     df_train = pandas.read_csv('forClassification.csv')
     final = pandas.DataFrame(data=df_train)
@@ -33,7 +33,7 @@ def constructModel( cc, frequencies):
     if not frequencies:
         count_vectorizer = CountVectorizer()
     else:
-        count_vectorizer = TfidfVectorizer(min_df=10)  ## Retire tous ce qui a une frequence max de 10
+        count_vectorizer = TfidfVectorizer(max_df=1000)  ## Retire tous ce qui a une frequence max de 10
 
     counts = count_vectorizer.fit_transform(vecteurQuestion.values)
 
@@ -73,10 +73,9 @@ def construcTableRP(predictions, trueclass, Model):
 
 
 
-def truePositive(classe, Model):
+def truePositive(classe, Model,tableRP):
 
-    data = construcTableRP(Model[0],
-                           Model[1],Model)
+    data = tableRP
     result = 0
     for i in range(0, len(data)):
 
@@ -86,9 +85,8 @@ def truePositive(classe, Model):
     return result
 
 
-def falsePositive(classe, Model):
-    data = construcTableRP(Model[0],
-                           Model[1], Model)
+def falsePositive(classe, Model,tableRP):
+    data = tableRP
     result = 0
     for i in range(0, len(data)):
 
@@ -124,29 +122,30 @@ def falseNegative(classeOption, Model):
     return result
 
 
-def precision(classe, Model):
-    return truePositive(classe,Model) / (
-    truePositive(classe, Model) + falsePositive(classe, Model))
+def precision(classe, Model,tableRP):
+    return truePositive(classe,Model,tableRP) / (
+    truePositive(classe, Model,tableRP) + falsePositive(classe, Model,tableRP))
 
 
-def recall(classe, Model):
-    return truePositive(classe, Model) / (falseNegative(classe, Model))
+def recall(classe, Model,tableRP):
+    return truePositive(classe, Model,tableRP) / (falseNegative(classe, Model))
 
 Model=constructModel(1500, False)
-
+tableRp=construcTableRP(Model[0], Model[1],Model)
 with open('dicoClass.json') as json_data:
     dico = json.load(json_data)
 
 Exo3.createliste(dico)
 
-print(precision("Positif",Model))
-print(precision("Negatif", Model))
+print(precision("Positif",Model,tableRp))
+print(precision("Negatif", Model,tableRp))
 
 print("=========================")
 Model=constructModel(1500, True)
+tableRp=construcTableRP(Model[0], Model[1],Model)
 
-print(precision("Positif", Model))
-print(precision("Negatif", Model))
+print(precision("Positif", Model,tableRp))
+print(precision("Negatif", Model,tableRp))
 
 
 

@@ -8,6 +8,14 @@ from nltk import word_tokenize
 from nltk.tag import StanfordPOSTagger
 from nltk.tokenize import RegexpTokenizer
 
+listTag=["CC","CD","DT","EX","FW","IN","JJ","JJR","JJS","LS","MD","NN","NNS","NNP","NNPS","PDT","POS","PRP","RB","RBR","RBS","RP","SYM","TO","UH","VB","VBD","VBG","VBN","VBP","VBZ","WDT","WP","WRB","PRP$","WP$"]
+listeToRemove=["CC","CD","DT","EX","FW","IN","LS","MD","PDT","POS","PRP","RP","SYM","TO","UH","WDT","WP","WRB","PRP$","WP$"]
+jar = 'stanford-postagger-full-2017-06-09/stanford-postagger.jar'
+model = 'stanford-postagger-full-2017-06-09/models/english-left3words-distsim.tagger'
+ps = StanfordPOSTagger(model, jar)
+
+#################################Partie 0
+
 def stopWordsList(fichierStopTxt):
 
     fileStop = open(fichierStopTxt, "r", 'utf-8')
@@ -17,19 +25,21 @@ def stopWordsList(fichierStopTxt):
 
     return listStopWords
 
+#################################Partie1
+
 def createDicoClasse():
 
     constructClasse={}
 
-    list_neg = listdir("../Book/neg_Bk")
-    list_pos = listdir("../Book/pos_Bk")
+    list_neg = listdir("Book/neg_Bk")
+    list_pos = listdir("Book/pos_Bk")
 
     number_files_neg = len(list_neg)
     number_files_pos = len(list_pos)
 
     for i in range(0,number_files_neg):
         try :
-            questions = open("../Book/neg_Bk/" +list_neg[i], "r", 'utf-8')
+            questions = open("Book/neg_Bk/" +list_neg[i], "r", 'utf-8')
             questionsread = questions.read()
             questions.close()
 
@@ -44,7 +54,7 @@ def createDicoClasse():
 
     for j in range(1,number_files_pos):
         try:
-            questions = open("../Book/pos_Bk/" + list_pos[j], "r", 'utf-8')
+            questions = open("Book/pos_Bk/" + list_pos[j], "r", 'utf-8')
             questionsread = questions.read()
             questions.close()
 
@@ -57,7 +67,7 @@ def createDicoClasse():
             pass
 
     return constructClasse
-
+#################################Partie1
 def lowercaseConvert():
 
     dico = createDicoClasse()
@@ -66,12 +76,11 @@ def lowercaseConvert():
 
         try:
             dico[key]["Text"]=dico[key]["Text"].lower()
-
         except KeyError:
             pass
 
-
     return dico
+# print(lowercaseConvert())
 
 def stopWords():
 
@@ -83,14 +92,14 @@ def stopWords():
 
         words = dico[key]["Text"].split()
         a = ""
-
+        print(a)
         for r in words:
             if not r in stop_words:
                 a = a + str(" "+r)
 
         dico[key]["Text"] = a
-
     return dico
+# print(stopWords())
 
 def deletePunc():
 
@@ -108,8 +117,8 @@ def deletePunc():
                 a = a + str(" "+r)
 
         dico[key]["Text"] = a
-
     return dico
+# print(deletePunc())
 
 def stemmingDico():
 
@@ -123,13 +132,10 @@ def stemmingDico():
         a=""
         for words in tokens:
             a= a+" "+ps.stem(words)
-            # print(a)
         dico[key]["Text"]=a
-
     return dico
 
-jar = '../stanford-postagger-full-2017-06-09/stanford-postagger.jar'
-model = '../stanford-postagger-full-2017-06-09/models/english-left3words-distsim.tagger'
+# print(stemmingDico())
 
 def correctStringPosttag(tocorrect, listTag,ps):
 
@@ -141,26 +147,22 @@ def correctStringPosttag(tocorrect, listTag,ps):
 
         if not(tag in listTag):
             result=result +" "+word
-
+    print(result)
     return result
 
-ps=["CC","CD","DT","EX","FW","IN","JJ","JJR","JJS","LS","MD","NN","NNS","NNP","NNPS","PDT","POS","PRP","RB","RBR","RBS","RP","SYM","TO","UH","VB","VBD","VBG","VBN","VBP","VBZ","WDT","WP","WRB","PRP$","WP$"]
-listeToRemove=["CC","CD","DT","EX","FW","IN","LS","MD","PDT","POS","PRP","RP","SYM","TO","UH","WDT","WP","WRB","PRP$","WP$"]
+def postDico(listTag,ps):
 
-def writeDico(dico):
-
-    with open('../dico.json', 'w',"utf-8") as outfile:
-        json.dump(dico, outfile)
-
-def postDico(listTag):
-    ps= StanfordPOSTagger(model, jar)
     dico=stemmingDico()
     i=0
     for key in dico:
         dico[key]["Text"] = correctStringPosttag(dico[key]["Text"], listTag, ps)
         print(i)
         i=i+1
+    print(dico)
     return dico
+
+# print(postDico(listeToRemove,ps))
+
 
 def createCsv(classe,text):
 
@@ -182,4 +184,5 @@ def createliste(dico):
 
     createCsv(classe,text)
 
+# createliste(postDico(listeToRemove,ps))
 

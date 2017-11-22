@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier as mod2
 from sklearn.feature_extraction.text import CountVectorizer
 
 #Choix du classifieurn i=1 NaivesBayes sinon RandomForest
+#################################Partie 0
 def choiceClassifier(i):
 
     if(i==1):
@@ -14,15 +15,16 @@ def choiceClassifier(i):
 
     return classifier
 
+#################################Partie 1
 #Construction du fichier csv s'il n'est pas encore présent dans le répértoire
-def construccsv():
+def construCsv():
 
     a = glob.glob("*.csv")
     if (len(a)==0):
         exo2.constructCsv()
 
-construccsv()
 
+#################################Partie 2
 #Construction du modèle prédictive en fonction du choiceClassifier() et prédiction sur un certain nombre de ligne résévées au test
 def constructModel(cc,j):
 
@@ -33,15 +35,17 @@ def constructModel(cc,j):
     final=pandas.DataFrame(data=df_train)
     #Y sera mon vecteur de classe et x le vecteur de question associé
     vecteurClasseTrain=final["Classe"][:cc]
+    # print(vecteurClasseTrain)
     vecteurQuestion=final["Question"]
     classifier=classifieur()
     targetsClasse=vecteurClasseTrain[:cc].values
-    vecteurClasseTest=final["Classe"][cc:389].values
+    vecteurClasseTest=final["Classe"][cc:].values
+    # print(final["Classe"][cc:])
     count_vectorizer = CountVectorizer()
     counts = count_vectorizer.fit_transform(vecteurQuestion[:cc].values)
     classifier.fit(counts, targetsClasse)
 
-    examples = vecteurQuestion[cc:389]
+    examples = vecteurQuestion[cc:]
     example_counts = count_vectorizer.transform(examples)
     predictions = classifier.predict(example_counts)
 
@@ -51,6 +55,8 @@ def constructModel(cc,j):
     result.append(j)
 
     return result
+
+#################################Partie 3
 
 #Ici on construit un dictionnaire qui nous stock les différence entre les vraies prédictions et les fausses pour chaque classe
 def construcTableRP(predictions,trueclass):
@@ -73,7 +79,9 @@ def construcTableRP(predictions,trueclass):
             })
 
     return result
-def truePositive(classe,Model,tableRP):
+#################################Partie 4
+
+def truePositive(classe,tableRP):
 
     data = tableRP
     result=0
@@ -83,7 +91,7 @@ def truePositive(classe,Model,tableRP):
             result+=1
     return result
 
-def falsePositive(classe,Model,tableRP):
+def falsePositive(classe,tableRP):
 
     data = tableRP
     result=0
@@ -117,11 +125,11 @@ def falseNegative(classeOption,Model):
     return result
 
 def precision(classe,Model,tableRP):
-    return truePositive(classe,Model,tableRP)/(truePositive(classe,Model,tableRP)+falsePositive(classe,Model,tableRP))
+    return truePositive(classe,tableRP)/(truePositive(classe,tableRP)+falsePositive(classe,tableRP))
 
 def recall(classe,Model,tableRP):
-    return truePositive(classe,Model,tableRP)/(falseNegative(classe,Model))
-
+    return truePositive(classe,tableRP)/(falseNegative(classe,Model))
+#################################Partie 5
 
 def general(Model, tableRP,classe):
 
@@ -135,12 +143,6 @@ def general(Model, tableRP,classe):
     print("Pour un rappel de:")
     print(recall(classe,Model,tableRP))
 
-
-Model1=constructModel(100, 1)
-Model2=constructModel(250, 2)
-tableRp1=construcTableRP(Model1[0],Model1[1])
-tableRp2=construcTableRP(Model2[0],Model2[1])
-liste=["DEFINITION","QUANTITY","LOCATION","TEMPORAL","PERSON"]
 def result(list,model,tableRP):
 
     if (model[3]==1):
@@ -153,7 +155,12 @@ def result(list,model,tableRP):
         general(model,tableRP,key)
     print("-------------------")
 
-
+construCsv()
+Model1=constructModel(15, 1)
+Model2=constructModel(15, 2)
+tableRp1=construcTableRP(Model1[0],Model1[1])
+tableRp2=construcTableRP(Model2[0],Model2[1])
+liste=["DEFINITION","QUANTITY","LOCATION","TEMPORAL","PERSON"]
 result(liste,Model1,tableRp1)
 result(liste,Model2,tableRp2)
 
